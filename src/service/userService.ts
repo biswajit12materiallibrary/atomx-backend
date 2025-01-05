@@ -60,14 +60,13 @@ export const fetchTransaction = async (req: any) => {
       // Get start and end of the target date in IST
       const startOfDayIST = new Date(`${startDate}T00:00:00+05:30`);
       const endOfDayIST = new Date(`${endDate}T23:59:59.999+05:30`);
-      const startUTC = new Date(startOfDayIST.toISOString());
+      const startUTC = new Date(startOfDayIST);
       const endUTC = new Date(endOfDayIST.toISOString());
-      query.createAt = {
-        $gte: startUTC,
-        $lte: endUTC,
+      query.timestamp = {
+        $gte: startOfDayIST.getTime(),
+        $lte: endOfDayIST.getTime(),
       };
     }
-
     const fetch = await transactionSchema
       .find(query, { _id: 0, __v: 0 })
       .sort(sort)
@@ -98,13 +97,14 @@ export const fetchTransactionorExcel = async (req: any) => {
 
     if (startDate && endDate) {
       // Get start and end of the target date in IST
+      // Get start and end of the target date in IST
       const startOfDayIST = new Date(`${startDate}T00:00:00+05:30`);
       const endOfDayIST = new Date(`${endDate}T23:59:59.999+05:30`);
-      const startUTC = new Date(startOfDayIST.toISOString());
+      const startUTC = new Date(startOfDayIST);
       const endUTC = new Date(endOfDayIST.toISOString());
-      query.createAt = {
-        $gte: startUTC,
-        $lte: endUTC,
+      query.timestamp = {
+        $gte: startOfDayIST.getTime(),
+        $lte: endOfDayIST.getTime(),
       };
     }
     let shipmentData;
