@@ -67,6 +67,7 @@ export const fetchTransaction = async (req: any) => {
         $lte: endOfDayIST.getTime(),
       };
     }
+    const totalcount = await transactionSchema.countDocuments(query);
     const fetch = await transactionSchema
       .find(query, { _id: 0, __v: 0 })
       .sort(sort)
@@ -75,7 +76,7 @@ export const fetchTransaction = async (req: any) => {
       .lean();
     return {
       success: true,
-      data: fetch,
+      data: { data: fetch, totalcount: totalcount },
       message: "Transaction fetch Successfully",
       statusCode: 200,
     };
